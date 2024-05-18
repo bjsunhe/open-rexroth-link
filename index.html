@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Read JSON File</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+    #output {
+      white-space: pre-wrap; /* Preserve whitespace and wrap as needed */
+      background-color: #f8f8f8;
+      border: 1px solid #ddd;
+      padding: 10px;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Read JSON File</h1>
+  <input type="file" id="fileInput" accept=".json" />
+  <pre id="output"></pre>
+
+  <script>
+    document.getElementById('fileInput').addEventListener('change', function(event) {
+  const file = event.target.files[0];
+  if (file) {
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      try {
+        const rexrothData = JSON.parse(e.target.result);
+        displayJSON(rexrothData);
+        console.log(rexrothData.length)
+
+
+        let index = 0;
+
+        const intervalId = setInterval(() => {
+        if (index < rexrothData.length) {
+            window.open(rexrothData[index].productLink,'_blank');
+            index++;
+        } else {
+            clearInterval(intervalId);
+        }
+        }, 10000);
+      } catch (error) {
+        console.error('Error parsing JSON:', error);
+        alert('Invalid JSON file.');
+      }
+    };
+    reader.readAsText(file);
+  }
+});
+
+function displayJSON(json) {
+  const output = document.getElementById('output');
+  output.textContent = JSON.stringify(json, null, 2); // Pretty print JSON with 2-space indentation
+}
+
+  </script>
+</body>
+</html>
